@@ -5,9 +5,12 @@ on:
   pull_request_review: {}
 
 jobs:
-- uses: actions/github-script@v6
-  id: check-requirements
-  with:
-    result-encoding: string
-    script: |
-      console.log(context);
+  check-requirements:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/github-script@v6
+      id: check-requirements
+      with:
+        result-encoding: string
+        script: |
+          console.log(context);
