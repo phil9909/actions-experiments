@@ -14,3 +14,4 @@ jobs:
         result-encoding: string
         script: |
           console.log(context);
+          console.log(context.payload.pull_request.labels.find(label => label.name.startsWith("size/")).name);
