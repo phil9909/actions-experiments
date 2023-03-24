@@ -27,7 +27,7 @@ jobs:
             break;
           }
           let [owner, repo] = context.payload.repository.full_name.split("/");
-          let reviews = await octokit.rest.pulls.listReviews({
+          let reviews = await github.rest.pulls.listReviews({
             owner: owner,
             repo: repo,
             pull_number: context.payload.pull_request.number
