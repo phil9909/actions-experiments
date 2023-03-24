@@ -19,7 +19,7 @@ jobs:
             core.setFailed("Missing Size Label");
             return;
           }
-          const [_, size] = sizeLabel.split("/");
+          const [_, size] = sizeLabel.name.split("/");
           let reviewsRequired = 2;
           if(size === "XS") {
             reviewsRequired = 1;
