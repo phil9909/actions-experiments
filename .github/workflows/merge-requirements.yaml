@@ -5,6 +5,7 @@ on:
     types:
     - labeled
     - unlabeled
+    - opened
     branches:
     - main
   pull_request_review:
