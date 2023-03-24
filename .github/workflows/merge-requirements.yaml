@@ -15,7 +15,7 @@ jobs:
     name: Minimum Reviews
     steps:
     - uses: actions/github-script@v6
-      id: check-requirements
+      id: mimimum-reviews
       with:
         result-encoding: string
         script: |
