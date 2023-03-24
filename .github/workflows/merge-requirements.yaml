@@ -2,6 +2,7 @@ on:
   pull_request_target:
     types:
     - labeled
+    - unlabeled
   pull_request_review: {}
 
 jobs:
@@ -21,8 +22,9 @@ jobs:
           }
           let reviewsRequired = 2;
           switch(sizeLabel.name) {
-            "size/S":
+            case "size/S":
               reviewsRequired = 1;
+            break;
           }
           let [owner, repo] = context.payload.repository.full_name.split("/");
           let reviews = await octokit.rest.pulls.listReviews({
