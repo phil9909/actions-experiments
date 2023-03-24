@@ -7,7 +7,7 @@ on:
     - unlabeled
   pull_request_review: {}
 
-concurrency: merge_requirements_${{ github.event.number }}
+concurrency: merge_requirements_${{ github.event.number }} # make sure only one instance runs at a time (per PR).
 
 jobs:
   check-requirements:
@@ -19,17 +19,21 @@ jobs:
       with:
         result-encoding: string
         script: |
-          console.log(context);
+          // find size label
           const sizeLabel = context.payload.pull_request.labels.find(label => label.name.startsWith("size/"));
           if (sizeLabel === undefined) {
             core.setFailed("Missing Size Label");
             return;
           }
           const [_, size] = sizeLabel.name.split("/");
+
+          // apply rules from https://github.com/helm/helm/blob/main/CONTRIBUTING.md#size-labels
           let reviewsRequired = 2;
           if(size === "XS") {
             reviewsRequired = 1;
           }
+
+          // count reviews
           const [owner, repo] = context.payload.repository.full_name.split("/");
           const reviews = await github.rest.pulls.listReviews({
             owner: owner,
@@ -38,6 +42,8 @@ jobs:
           });
           // see https://docs.github.com/en/graphql/reference/enums#commentauthorassociation
           const relevantReviews = reviews.data.filter(review => review.state === 'APPROVED' && review.author_association === 'COLLABORATOR');
+
+          // check requirements
           if (relevantReviews.length < reviewsRequired) {
             core.setFailed(`PR of size ${size} requires at least ${reviewsRequired} review(s) from maintainers`);
           }
