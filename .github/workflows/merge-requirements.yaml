@@ -1,3 +1,5 @@
+name: Check Merge Requirements
+
 on:
   pull_request_target:
     types:
@@ -8,7 +10,7 @@ on:
 jobs:
   check-requirements:
     runs-on: ubuntu-latest
-    name: Check Review Requirements
+    name: Minimum Reviews
     steps:
     - uses: actions/github-script@v6
       id: check-requirements
