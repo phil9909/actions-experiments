@@ -1,4 +1,4 @@
-name: Check Merge Requirements
+name: Merge Requirements
 
 on:
   pull_request_target:
@@ -6,6 +6,8 @@ on:
     - labeled
     - unlabeled
   pull_request_review: {}
+
+concurrency: merge_requirements_${{ github.event.number }}
 
 jobs:
   check-requirements:
@@ -17,6 +19,7 @@ jobs:
       with:
         result-encoding: string
         script: |
+          console.log(context);
           const sizeLabel = context.payload.pull_request.labels.find(label => label.name.startsWith("size/"));
           if (sizeLabel === undefined) {
             core.setFailed("Missing Size Label");
