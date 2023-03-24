@@ -14,23 +14,24 @@ jobs:
       with:
         result-encoding: string
         script: |
-          console.log(context);
-          let sizeLabel = context.payload.pull_request.labels.find(label => label.name.startsWith("size/"));
+          const sizeLabel = context.payload.pull_request.labels.find(label => label.name.startsWith("size/"));
           if (sizeLabel === undefined) {
-            console.log("Missing Size Label");
+            core.setFailed("Missing Size Label");
             return;
           }
+          const [_, size] = label.split("/");
           let reviewsRequired = 2;
-          switch(sizeLabel.name) {
-            case "size/S":
-              reviewsRequired = 1;
-            break;
+          if(size === "XS") {
+            reviewsRequired = 1;
           }
-          let [owner, repo] = context.payload.repository.full_name.split("/");
-          let reviews = await github.rest.pulls.listReviews({
+          const [owner, repo] = context.payload.repository.full_name.split("/");
+          const reviews = await github.rest.pulls.listReviews({
             owner: owner,
             repo: repo,
             pull_number: context.payload.pull_request.number
           });
           // see https://docs.github.com/en/graphql/reference/enums#commentauthorassociation
-          console.log(reviews.data.filter(review => review.state === 'APPROVED' && review.author_association === 'COLLABORATOR'));
+          const relevantReviews = reviews.data.filter(review => review.state === 'APPROVED' && review.author_association === 'COLLABORATOR'));
+          if (relevantReviews.length < reviewsRequired) {
+            core.setFailed(`PR of size ${size} requires at least ${reviewsRequired} review(s) from maintainers`);
+          }
