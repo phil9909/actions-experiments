@@ -5,7 +5,11 @@ on:
     types:
     - labeled
     - unlabeled
-  pull_request_review: {}
+    branches:
+    - main
+  pull_request_review:
+    branches:
+    - main
 
 concurrency: merge_requirements_${{ github.event.number }} # make sure only one instance runs at a time (per PR).
 
