@@ -31,7 +31,7 @@ jobs:
             pull_number: context.payload.pull_request.number
           });
           // see https://docs.github.com/en/graphql/reference/enums#commentauthorassociation
-          const relevantReviews = reviews.data.filter(review => review.state === 'APPROVED' && review.author_association === 'COLLABORATOR'));
+          const relevantReviews = reviews.data.filter(review => review.state === 'APPROVED' && review.author_association === 'COLLABORATOR');
           if (relevantReviews.length < reviewsRequired) {
             core.setFailed(`PR of size ${size} requires at least ${reviewsRequired} review(s) from maintainers`);
           }
