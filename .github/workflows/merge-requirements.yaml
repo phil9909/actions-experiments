@@ -36,5 +36,5 @@ jobs:
           // see https://docs.github.com/en/graphql/reference/enums#commentauthorassociation
           const relevantReviews = reviews.data.filter(review => review.state === 'APPROVED' && review.author_association === 'COLLABORATOR');
           if (relevantReviews.length < reviewsRequired) {
-            core.error(`PR of size ${size} requires at least ${reviewsRequired} review(s) from maintainers`);
+            core.setFailed(`PR of size ${size} requires at least ${reviewsRequired} review(s) from maintainers`);
           }
