@@ -1,0 +1,16 @@
+name: Test
+
+on:
+  push: {}
+
+jobs:
+  matrix:
+    if: '! (startsWith(github.ref_name, "auth/") && contains(github.ref_name, "/api/"))' # don't run for auth client library releases (e.g. "auth/gcp/api/v0.0.1")
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "hello world"
+  build:
+    needs: matrix
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "hello world"
